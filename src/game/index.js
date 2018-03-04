@@ -16,7 +16,8 @@ dataValidate = ajv.compile({
         y: { type: 'number' }
       },
       required: [ 'x', 'y' ]
-    }
+    },
+    color: { type: 'number' }
   }
 })
 
@@ -24,7 +25,6 @@ class Game extends EventEmitter {
   constructor() {
     super()
     this.started = false
-    this.app = require('./canvas')()
 
     this.players = []
   }
@@ -32,39 +32,61 @@ class Game extends EventEmitter {
   addPlayer(id, data) {
     const valid = dataValidate(data)
     if (!valid) return console.warn(truncate(this.id, 9, { position: 'middle' }), 'invalid data', ajv.errorsText(dataValidate.errors))
-    const { name, pos, angle } = data
 
     const player = new OnlinePlayer(id)
-    player.update({ name, pos, angle })
+    player.update(data)
+
+    player.on('update', (data) => {
+      this.emit('update', id, data)
+    })
 
     this.players.push(player)
+
+    this.emit('add-player', id, data)
   }
 
   updatePlayer(id, data) {
     const valid = dataValidate(data)
     if (!valid) return console.warn(truncate(this.id, 9, { position: 'middle' }), 'invalid data', ajv.errorsText(dataValidate.errors))
-    const { name, pos, angle } = data
     
     const player = this.players.find((player) => player.id === id)
     if (!player) return
 
-    player.update({ name, pos, angle })
+    player.update(data)
   }
 
-  start() {
+  removePlayer(id) {
+    const playerIndex = this.players.findIndex((player) => player.id === id)
+    if (playerIndex === -1) return
+
+    this.players[playerIndex].removeAllListeners()
+
+    this.players.slice(playerIndex, 1)
+
+    this.emit('remove-player', id)
+  }
+
+  start(id) {
     if (this.started) return
     this.started = true
 
-    this.me = new LocalPlayer()
+    this.me = new LocalPlayer(id)
 
-    this.me.on('update', ({ name, pos, ange }) => {
-      this.emit('update', { name, pos, angle })
+    this.me.on('update', (data) => {
+      this.emit('update', this.me.id, data)
     })
 
     this.emit('start', {
       name: this.me.name,
       pos: this.me.pos,
       angle: this.me.angle
+    })
+
+    this.emit('add-player', this.me.id, {
+      name: this.me.name,
+      pos: this.me.pos,
+      angle: this.me.angle,
+      color: this.me.color
     })
   }
 }

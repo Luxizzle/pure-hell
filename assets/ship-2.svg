@@ -1,0 +1,8 @@
+<svg class="vector" width="300px" height="300px" 
+  xmlns="http://www.w3.org/2000/svg" baseProfile="full" version="1.1" style="width: 300px; height: 300px; stroke: rgb(0, 0, 0); stroke-width: 50; fill: none; stroke-linecap: round; stroke-linejoin: round;">
+  <g transform="translate(0,0)">
+    <path id="layer_3" d="" style="stroke: rgb(204, 204, 204);"></path>
+    <path id="layer_2" d="" style="stroke: rgb(153, 153, 153);"></path>
+    <path id="layer_1" d="M270,150 L270,150 L30,30 L90,150 L30,270 M30,270 L30,270 L270,150 " style="stroke: rgb(255, 255, 255);"></path>
+  </g>
+</svg>

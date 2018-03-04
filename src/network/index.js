@@ -146,7 +146,7 @@ class Network extends EventEmitter {
       this.peers.splice(index, 1)
     })
 
-    console.log('Connecting to network')
+    console.log('Connecting to network at channel', this.channel)
   }
 
   /** 

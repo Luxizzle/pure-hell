@@ -35,7 +35,7 @@ class Peer extends EventEmitter {
     const valid = dataValidate(data)
     if (!valid) return console.warn(truncate(this.id, 9, { position: 'middle' }), 'invalid data', ajv.errorsText(dataValidate.errors))
 
-    console.log(truncate(this.id, 9, { position: 'middle' }), data)
+    if (data.type !== 'update') console.log(truncate(this.id, 9, { position: 'middle' }), data)
 
     this.emit('data', data)
   }
