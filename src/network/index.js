@@ -42,14 +42,14 @@ class Network extends EventEmitter {
     this._state = v 
     this.emit('state', this._state)
   }
-
+/*
   sendHearbeat() {
     this.broadcast({
       type: 'swarm',
       props: { peers: this.peers.map((peer) => peer.id) }
     })
   }
-
+*/
   // broadcast to all peers
   broadcast(data) {
     this.peers.forEach((peer) => {
@@ -65,7 +65,7 @@ class Network extends EventEmitter {
       throw new Error('No peer with id ' + id)
     }
   }
-
+/*
   checkSwarm(peers) { 
     // idk i send all the peer ids, maybe for future i guess
     // this could also be exploitable and freeze clients forever so eh
@@ -76,7 +76,7 @@ class Network extends EventEmitter {
       this.state = NETWORK_STATES.CONNECTING
     }
   }
-
+*/
   /**
    * Connect to a channel
    * 
@@ -84,11 +84,11 @@ class Network extends EventEmitter {
    */
   connect(channel = 'default', hubs = DEFAULT_HUBS) {
     if (this.state !== NETWORK_STATES.CLOSED) this.close()
-    this.state = NETWORK_STATES.CONNECTING
+    this.state = NETWORK_STATES.CONNECTED // NETWORK_STATES.CONNECTING
     this.channel = channel
-
+/*
     this.heartbeat = setInterval(this.sendHearbeat.bind(this), 60 * 1000)
-
+*/
     this.hub = Signalhub(channel, hubs)
     this.swarm = Swarm(this.hub)
 
@@ -99,9 +99,11 @@ class Network extends EventEmitter {
 
       peer.on('data', (data) => {
         switch(data.type) {
+          /*
           case 'swarm':
             this.checkSwarm(data.props.peers)
             break
+            */
           case 'disconnect-me': // The peer announces that its going to disconnect
             peer.destroy()
             break
@@ -118,10 +120,12 @@ class Network extends EventEmitter {
         }
       })
 
+      /* 
       peer.send({
         type: 'swarm',
         props: { peers: this.peers.map((peer) => peer.id) }
-      })
+      }) 
+      */
 
       this.emit('connect', peer)
     })
@@ -141,6 +145,8 @@ class Network extends EventEmitter {
       
       this.peers.splice(index, 1)
     })
+
+    console.log('Connecting to network')
   }
 
   /** 
@@ -149,7 +155,7 @@ class Network extends EventEmitter {
   close() {
     if (this.state === NETWORK_STATES.CLOSED)
 
-    clearInterval(this.heartbeat)
+    // clearInterval(this.heartbeat)
     this.swarm.close()
     this.hub.close()
 

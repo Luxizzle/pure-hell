@@ -6,8 +6,6 @@ const Network = require('./network')
 window.game = new Game()
 window.network = new Network()
 
-network.connect()
-
 network.on('connect', (peer) => {
   peer.on('data', (data) => {
     switch (data.type) {
