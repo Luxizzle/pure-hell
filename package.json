@@ -26,6 +26,7 @@
     "cli-truncate": "^1.1.0",
     "lodash": "^4.17.5",
     "pixi.js": "^4.7.0",
+    "shortid": "^2.2.8",
     "signalhub": "^4.9.0",
     "webrtc-swarm": "^2.9.0"
   }
