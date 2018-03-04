@@ -46,7 +46,7 @@ class Network extends EventEmitter {
   sendHearbeat() {
     this.broadcast({
       type: 'swarm',
-      peers: this.peers.map((peer) => peer.id)
+      props: { peers: this.peers.map((peer) => peer.id) }
     })
   }
 
@@ -87,7 +87,7 @@ class Network extends EventEmitter {
     this.state = NETWORK_STATES.CONNECTING
     this.channel = channel
 
-    this.heartbeat = setInterval(this.sendHearbeat.bind(this), 30 * 1000)
+    this.heartbeat = setInterval(this.sendHearbeat.bind(this), 60 * 1000)
 
     this.hub = Signalhub(channel, hubs)
     this.swarm = Swarm(this.hub)
@@ -100,13 +100,13 @@ class Network extends EventEmitter {
       peer.on('data', (data) => {
         switch(data.type) {
           case 'swarm':
-            this.checkSwarm(data.peers)
+            this.checkSwarm(data.props.peers)
             break
           case 'disconnect-me': // The peer announces that its going to disconnect
             peer.destroy()
             break
           case 'disconnect': // A peer announces that it disconnected from another peer
-            const disPeer = this.peers.find((peer) => data.id === peer.id)
+            const disPeer = this.peers.find((peer) => data.props.id === peer.id)
             if (disPeer) {
               disPeer.disconnectVote += 1
 
@@ -120,7 +120,7 @@ class Network extends EventEmitter {
 
       peer.send({
         type: 'swarm',
-        peers: this.peers.map((peer) => peer.id)
+        props: { peers: this.peers.map((peer) => peer.id) }
       })
 
       this.emit('connect', peer)
@@ -134,7 +134,7 @@ class Network extends EventEmitter {
       
       this.broadcast({
         type: 'disconnect',
-        id
+        props: { id }
       })
 
       this.emit('disconnect', this.peers[index])
@@ -154,7 +154,7 @@ class Network extends EventEmitter {
     this.hub.close()
 
     this.broadcast({
-      type: 'disconnect-me',
+      type: 'disconnect-me'
     })
 
     this.peers.forEach((peer) => peer.destroy())

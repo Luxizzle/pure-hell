@@ -23,6 +23,7 @@
     "budo": "^11.1.7"
   },
   "dependencies": {
+    "ajv": "^6.2.1",
     "cli-truncate": "^1.1.0",
     "lodash": "^4.17.5",
     "pixi.js": "^4.7.0",

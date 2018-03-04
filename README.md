@@ -14,3 +14,4 @@ Also dont forget to run `npm i` before you start
 ## TODO
 
 - Change peer data sending to buffers and smaller payloads
+- Implement data validation

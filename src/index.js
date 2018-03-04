@@ -1,3 +1,5 @@
+const Ajv = require('ajv')
+window.ajv = new Ajv()
 const Game = require('./game')
 const Network = require('./network')
 
@@ -11,21 +13,30 @@ network.on('connect', (peer) => {
     switch (data.type) {
       case 'join':
         game.addPlayer(peer.id, {
-          name: data.name,
-          pos: data.pos,
-          angle: data.angle
+          name: data.props.name,
+          pos: data.props.pos,
+          angle: data.props.angle
         })
         break
       case 'update':
         game.updatePlayer(peer.id, {
-          name: data.name,
-          pos: data.pos,
-          angle: data.angle
+          name: data.props.name,
+          pos: data.props.pos,
+          angle: data.props.angle
         })
         break
       case 'shoot':
         
         break
+    }
+  })
+
+  peer.send({
+    type: 'join',
+    props: {
+      name: game.me.name, 
+      pos: game.me.pos, 
+      angle: game.me.angle
     }
   })
 })
@@ -39,16 +50,20 @@ network.on('state', (peer) => {
 })
 
 game.on('start', ({ name, pos, angle }) => {
+  console.log('Starting game')
+
   network.broadcast({
     type: 'join',
-    name, pos, angle
+    props: { name, pos, angle }
   })
 })
 
 game.on('update', ({ name, pos, angle }) => {
+  console.log('update', { name, pos, angle })
+
   network.broadcast({
     type: 'update',
-    name, pos, angle
+    props: { name, pos, angle }
   })
 })
 

@@ -2,6 +2,15 @@ const isJSON = require('../util/is-json')
 const EventEmitter = require('events').EventEmitter
 const truncate = require('cli-truncate')
 
+const dataValidate = ajv.compile({
+  type: 'object',
+  properties: {
+    type: { type: 'string' },
+    props: { type: 'object' }
+  },
+  required: [ 'type' ]
+})
+
 class Peer extends EventEmitter {
   constructor(peer, id) {
     super()
@@ -22,6 +31,9 @@ class Peer extends EventEmitter {
 
     if (!isJSON(data)) return
     data = JSON.parse(data)
+
+    const valid = dataValidate(data)
+    if (!valid) return console.warn(truncate(this.id, 9, { position: 'middle' }), 'invalid data', ajv.errorsText(dataValidate.errors))
 
     console.log(truncate(this.id, 9, { position: 'middle' }), data)
 
