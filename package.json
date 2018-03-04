@@ -1,0 +1,32 @@
+{
+  "name": "pure-hell",
+  "version": "0.0.1",
+  "description": "WebRTC powered online bullet hell",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "ava",
+    "dev": "budo src/index.js -dir assets/ --css assets/style.css --live",
+    "build": "browserify src/index.js -o dist/bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luxizzle/pure-hell.git"
+  },
+  "author": "Jelmer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Luxizzle/pure-hell/issues"
+  },
+  "homepage": "https://github.com/Luxizzle/pure-hell#readme",
+  "devDependencies": {
+    "browserify": "^16.1.0",
+    "budo": "^11.1.7"
+  },
+  "dependencies": {
+    "cli-truncate": "^1.1.0",
+    "lodash": "^4.17.5",
+    "pixi.js": "^4.7.0",
+    "signalhub": "^4.9.0",
+    "webrtc-swarm": "^2.9.0"
+  }
+}
