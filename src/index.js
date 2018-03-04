@@ -97,4 +97,4 @@ setInterval(() => {
       y: Math.random() * window.innerHeight
     }
   })
-}, 100)
+}, 250)

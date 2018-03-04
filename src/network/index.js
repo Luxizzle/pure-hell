@@ -103,7 +103,7 @@ class Network extends EventEmitter {
           case 'swarm':
             this.checkSwarm(data.props.peers)
             break
-            */
+          */
           case 'disconnect-me': // The peer announces that its going to disconnect
             peer.destroy()
             break

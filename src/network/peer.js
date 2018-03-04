@@ -17,8 +17,6 @@ class Peer extends EventEmitter {
 
     this.peer = peer
     this.id = id
-
-    // The amount of peers that have disconnected from this peer
     this.disconnectVote = 0
 
     this._destroyed = false
